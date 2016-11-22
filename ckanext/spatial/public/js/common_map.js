@@ -55,11 +55,14 @@
           leafletBaseLayerOptions.attribution = mapConfig.attribution;
       } else {
           // MapQuest OpenStreetMap base map
-          if (isHttps) {
-            baseLayerUrl = '//otile{s}-s.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
+          baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
+
+          /*if (isHttps) {
+            baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
           } else {
-            baseLayerUrl = '//otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
-          }
+            baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
+        }*/
+        
           leafletBaseLayerOptions.subdomains = mapConfig.subdomains || '1234';
           leafletBaseLayerOptions.attribution = mapConfig.attribution || 'Map data &copy; OpenStreetMap contributors, Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="//developer.mapquest.com/content/osm/mq_logo.png">';
       }

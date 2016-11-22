@@ -7,8 +7,8 @@
 
 {% import 'macros/form.html' as form %}
 
-    {% with 
-    name=field.field_name, 
+    {% with
+    name=field.field_name,
     id='field-' + field.field_name,
     label=h.scheming_language_text(field.label),
     placeholder=h.scheming_language_text(field.form_placeholder),
@@ -21,11 +21,11 @@
     {% call form.input_block(id, label, error, classes, is_required=is_required) %}
 
     {% set map_config = h.get_common_map_config() %}
-    <div class="dataset-map" 
+    <div class="dataset-map"
         data-module="spatial-form"
         data-input_id="{{ id }}"
-        data-extent="{{ value }}" 
-        data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}" 
+        data-extent="{{ value }}"
+        data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"
         data-module-map_config="{{ h.dump_json(map_config) }}">
       <div id="dataset-map-container"></div>
     </div>
@@ -35,7 +35,7 @@
     {{ form.info(text="Draw the dataset extent on the map,
        or paste a GeoJSON Polygon or Multipolygon geometry below", inline=false) }}
 
-    <textarea id="{{ id }}" type="{{ type }}" name="{{ name }}" 
+    <textarea id="{{ id }}" type="{{ type }}" name="{{ name }}"
         placeholder="{{ placeholder }}" rows=10 style="width:100%;">
       {{ value | empty_and_escape }}
     </textarea>
@@ -50,7 +50,7 @@
  * - a button "text to map", which overwrites the map with the GeoJSON geometry inside input {{ id }}
  * - a button "map to text", which overwrites the input {{ id }} with the GeoJSON geometry on the map
  * - this module loaded, providing the binding between map and form input
- * 
+ *
  */
 this.ckan.module('spatial-form', function (jQuery, _) {
 
@@ -74,7 +74,7 @@ this.ckan.module('spatial-form', function (jQuery, _) {
           fillOpacity: 0.4
         },
       },
-      default_extent: [[-10, 130], [-40, 110]]
+      default_extent:[[49, 17], [46, 9.5]]
     },
 
 
@@ -121,8 +121,8 @@ this.ckan.module('spatial-form', function (jQuery, _) {
            var r = data.result.resources;
            for (i in r){
             if (r[i].format == 'GeoJSON'){
-             //console.log('Found GeoJSON for ' + r[i].name + ' with id ' + r[i].id);   
-             
+             //console.log('Found GeoJSON for ' + r[i].name + ' with id ' + r[i].id);
+
              /* Option 1: Load GeoJSON using leaflet.ajax */
              //var geojsonLayer = L.geoJson.ajax(r[id].url);
              //geojsonLayer.addTo(map);
@@ -184,8 +184,8 @@ this.ckan.module('spatial-form', function (jQuery, _) {
         map.addControl(drawControl);
 
 
-        /* Aggregate all features in a FeatureGroup into one MultiPolygon, 
-         * update inputid with that Multipolygon's geometry 
+        /* Aggregate all features in a FeatureGroup into one MultiPolygon,
+         * update inputid with that Multipolygon's geometry
          */
         var featureGroupToInput = function(fg, input){
             var gj = drawnItems.toGeoJSON().features;
