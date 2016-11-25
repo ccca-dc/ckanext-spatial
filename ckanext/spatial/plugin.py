@@ -110,7 +110,6 @@ class SpatialMetadata(p.SingletonPlugin):
             if extra.key == 'spatial':
                 if extra.state == 'active' and extra.value:
                     try:
-                        log.debug('Received: %r' % extra.value)
                         geometry = json.loads(extra.value)
                     except ValueError,e:
                         error_dict = {'spatial':[u'Error decoding JSON object: %s' % str(e)]}

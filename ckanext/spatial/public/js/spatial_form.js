@@ -112,49 +112,6 @@ this.ckan.module('spatial-form', function (jQuery, _) {
         /* Add GeoJSON layers for any GeoJSON resources of the dataset */
         //var existingLayers = {};
         var url = window.location.href.split('dataset/edit/');
-        $.ajax({
-         url: url[0] + 'api/3/action/package_show',
-         data: {id : url[1]},
-         dataType: 'jsonp',
-         success: function(data) {
-           //console.log('Got resources: ' + JSON.stringify(data.result.resources));
-           var r = data.result.resources;
-           for (i in r){
-            if (r[i].format == 'GeoJSON'){
-             //console.log('Found GeoJSON for ' + r[i].name + ' with id ' + r[i].id);
-
-             /* Option 1: Load GeoJSON using leaflet.ajax */
-             //var geojsonLayer = L.geoJson.ajax(r[id].url);
-             //geojsonLayer.addTo(map);
-
-             /* Option 2: Load GeoJSON using JQuery */
-             $.getJSON(r[i].url, function(data) {
-                var gj = L.geoJson(data, {
-                    pointToLayer: function (feature, latLng) {
-                        return new L.Marker(latLng, {icon: new ckanIcon})
-                    },
-                    onEachFeature: function(feature, layer) {
-                      var body = '';
-                      var row = '<tr><th>{key}</th><td>{value}</td></tr>';
-                      var table = '<table class="table table-striped table-bordered table-condensed" style="width:300px;"><tbody>{body}</tbody></table>';
-                      jQuery.each(feature.properties, function(key, value){
-                        if (value != null && typeof value === 'object') {
-                          value = JSON.stringify(value);
-                        }
-                        body += L.Util.template(row, {key: key, value: value});
-                      });
-                      var popupContent = L.Util.template(table, {body: body});
-                        layer.bindPopup(popupContent);
-                    }
-                });
-                gj.addTo(map);
-                //existingLayers[r[i].name] = gj;
-             }); // end getJSON
-            } // end if
-           } // end for
-           //L.control.layers(existingLayers).addTo(map); // or similar
-         }
-         });
 
         /* Add existing extent or new layer */
         if (this.extent) {

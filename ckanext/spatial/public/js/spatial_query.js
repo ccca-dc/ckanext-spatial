@@ -13,7 +13,7 @@ this.ckan.module('spatial-query', function ($, _) {
         fillColor: '#F06F64',
         fillOpacity: 0.1
       },
-      default_extent: [[90, 180], [-90, -180]]
+      default_extent:[[49, 17], [46, 9.5]]
     },
     template: {
       buttons: [
@@ -94,8 +94,8 @@ this.ckan.module('spatial-query', function ($, _) {
 
       // Initialize the map
       map = ckan.commonLeafletMap(
-        'dataset-map-container', 
-        this.options.map_config, 
+        'dataset-map-container',
+        this.options.map_config,
         {attributionControl: false}
       );
       map.addLayer(extentLayer); // new for Leaflet.draw 2.*

@@ -57,12 +57,6 @@
           // MapQuest OpenStreetMap base map
           baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
 
-          /*if (isHttps) {
-            baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
-          } else {
-            baseLayerUrl = '//stamen-tiles-b.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg';
-        }*/
-        
           leafletBaseLayerOptions.subdomains = mapConfig.subdomains || '1234';
           leafletBaseLayerOptions.attribution = mapConfig.attribution || 'Map data &copy; OpenStreetMap contributors, Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="//developer.mapquest.com/content/osm/mq_logo.png">';
       }
