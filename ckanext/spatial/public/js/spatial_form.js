@@ -123,7 +123,6 @@ this.ckan.module('spatial-form', function (jQuery, _) {
               }
             });
             oldExtent.addTo(map);
-            map.fitBounds(oldExtent.getBounds());
         }
 
 
@@ -138,6 +137,16 @@ this.ckan.module('spatial-form', function (jQuery, _) {
             },
             edit: { featureGroup: drawnItems }
         });
+        var drawControlGeoJson = new L.Control.Draw({
+            draw: {
+                polyline: false,
+                circle: false,
+                marker: false,
+                rectangle: {repeatMode: false}
+
+            },
+            edit: false
+        });
         map.addControl(drawControl);
 
 
@@ -145,7 +154,7 @@ this.ckan.module('spatial-form', function (jQuery, _) {
          * update inputid with that Multipolygon's geometry
          */
         var featureGroupToInput = function(fg, input){
-            var gj = drawnItems.toGeoJSON().features;
+            var gj = fg.toGeoJSON().features;
             var polyarray = [];
             $.each(gj, function(index, value){ polyarray.push(value.geometry.coordinates); });
             mp = {"type": "MultiPolygon", "coordinates": polyarray};
@@ -154,23 +163,52 @@ this.ckan.module('spatial-form', function (jQuery, _) {
             //$("#" + input).val(JSON.stringify(mp)); // doesn't work
         };
 
+        var fillBoundingBox = function(fg){
+            var bounds = fg.getLayers()[0].getBounds();
+            $('#field-iso_northBL').val(bounds._northEast.lat.toFixed(4));
+            $('#field-iso_eastBL').val(bounds._northEast.lng.toFixed(4));
+            $('#field-iso_southBL').val(bounds._southWest.lat.toFixed(4));
+            $('#field-iso_westBL').val(bounds._southWest.lng.toFixed(4));
+        };
+
 
         /* When one shape is drawn/edited/deleted, update input_id with all drawn shapes */
         map.on('draw:created', function (e) {
             var type = e.layerType,
                 layer = e.layer;
+            drawnItems.clearLayers();
             drawnItems.addLayer(layer);
+            document.getElementById("select-extent").selectedIndex = "0";
             // To only add the latest drawn element to input #field-spatial:
             //$("#field-spatial")[0].value = JSON.stringify(e.layer.toGeoJSON().geometry);
             featureGroupToInput(drawnItems, this.input);
+            fillBoundingBox(drawnItems);
+
+            map.removeControl(drawControlGeoJson);
+            map.addControl(drawControl);
         });
 
         map.on('draw:editstop', function(e){
             featureGroupToInput(drawnItems, this.input);
+            fillBoundingBox(drawnItems);
         });
 
         map.on('draw:deletestop', function(e){
             featureGroupToInput(drawnItems, this.input);
+            $('#field-spatial').val("");
+        });
+
+        $('#select-extent').on('change', function(e) {
+            $('#field-spatial').val($("#select-extent").val());
+
+            drawnItems.clearLayers();
+            extent = L.geoJson(JSON.parse($("#select-extent").val()));
+            drawnItems.addLayer(extent);
+
+            fillBoundingBox(extent);
+
+            map.removeControl(drawControl);
+            map.addControl(drawControlGeoJson);
         });
 
     }
