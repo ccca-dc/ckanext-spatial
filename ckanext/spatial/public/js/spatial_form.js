@@ -87,6 +87,13 @@ this.ckan.module('spatial-form', function (jQuery, _) {
       jQuery.proxyAll(this, /_on/);
       this.el.ready(this._onReady);
 
+      if(document.getElementsByName("spatial_name")){
+          var optVal = $("option").filter(function() {
+                            return $(this).text() === $('#field-spatial_name').val();
+                        }).val();
+          $("#select-extent").val(optVal);
+      }
+
     },
 
 
@@ -160,6 +167,10 @@ this.ckan.module('spatial-form', function (jQuery, _) {
             mp = {"type": "MultiPolygon", "coordinates": polyarray};
             // TODO use input for element id
             $('#field-spatial').val(JSON.stringify(mp));
+
+            if(document.getElementsByName("spatial_name")){
+                $('#field-spatial_name').val("");
+            }
             //$("#" + input).val(JSON.stringify(mp)); // doesn't work
         };
 
@@ -209,6 +220,10 @@ this.ckan.module('spatial-form', function (jQuery, _) {
 
             map.removeControl(drawControl);
             map.addControl(drawControlGeoJson);
+
+            if(document.getElementsByName("spatial_name")){
+                $('#field-spatial_name').val($("#select-extent option:selected").text());
+            }
         });
 
     }
