@@ -109,7 +109,8 @@ this.ckan.module('spatial-form', function (jQuery, _) {
             this.options.map_config,
             {attributionControl: false}
         );
-        map.fitBounds(this.options.default_extent);
+        var default_extent = this.options.default_extent;
+        map.fitBounds(default_extent);
 
         /* Add an empty layer for newly drawn items */
         var drawnItems = new L.FeatureGroup();
@@ -225,6 +226,14 @@ this.ckan.module('spatial-form', function (jQuery, _) {
                 $('#field-spatial_name').val($("#select-extent option:selected").text());
             }
         });
+
+        // for map to be shown correctly with bootstrap tabs
+        $('.nav-tabs a[href="#Spatial"]').one('click', function (e) {
+            setTimeout(function(){
+                map.invalidateSize();
+                map.fitBounds(default_extent);
+            }, 400);
+        })
 
     }
   }
