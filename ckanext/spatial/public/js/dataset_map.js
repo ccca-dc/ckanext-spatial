@@ -82,6 +82,14 @@ this.ckan.module('dataset-map', function (jQuery, _) {
           map.invalidateSize();
           map.fitBounds(extentLayer.getBounds());
       })
+
+      // for map to be shown correctly with bootstrap tabs
+      $('.nav-tabs a[href="#Spatial"]').one('click', function (e) {
+          setTimeout(function(){
+              map.invalidateSize();
+              map.fitBounds(extentLayer.getBounds());
+          }, 400);
+      })
     }
   }
 });
