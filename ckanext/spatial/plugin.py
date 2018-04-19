@@ -184,17 +184,18 @@ class SpatialQuery(p.SingletonPlugin):
 
             if self.search_backend == 'solr':
                 # Only bbox supported for this backend
-                if not (geometry['type'] == 'Polygon'
+                print "******************* spatial search"
+                if not (geometry['type'] == 'MultiPolygon'
                    and len(geometry['coordinates']) == 1
-                   and len(geometry['coordinates'][0]) == 5):
+                   and len(geometry['coordinates'][0][0]) == 5):
                     log.error('Solr backend only supports bboxes, ignoring geometry {0}'.format(pkg_dict['extras_spatial']))
                     return pkg_dict
 
                 coords = geometry['coordinates']
-                pkg_dict['maxy'] = max(coords[0][2][1], coords[0][0][1])
-                pkg_dict['miny'] = min(coords[0][2][1], coords[0][0][1])
-                pkg_dict['maxx'] = max(coords[0][2][0], coords[0][0][0])
-                pkg_dict['minx'] = min(coords[0][2][0], coords[0][0][0])
+                pkg_dict['maxy'] = max(coords[0][0][2][1], coords[0][0][0][1])
+                pkg_dict['miny'] = min(coords[0][0][2][1], coords[0][0][0][1])
+                pkg_dict['maxx'] = max(coords[0][0][2][0], coords[0][0][0][0])
+                pkg_dict['minx'] = min(coords[0][0][2][0], coords[0][0][0][0])
                 pkg_dict['bbox_area'] = (pkg_dict['maxx'] - pkg_dict['minx']) * \
                                         (pkg_dict['maxy'] - pkg_dict['miny'])
 
